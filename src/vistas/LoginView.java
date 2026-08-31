@@ -107,8 +107,41 @@ public class LoginView extends JFrame {
         });
 
         btnIngresar.addActionListener(e -> {
-            new DashboardView().setVisible(true);
-            this.dispose();
+            String usuario = txtUsuario.getText();
+            String password = new String(txtPassword.getPassword());
+
+            if (usuario.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingrese su usuario y contraseña.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            dao.Conexion conexionDB = new dao.Conexion();
+            java.sql.Connection con = conexionDB.conectar();
+
+            if (con != null) {
+                if (usuario.equals("admin") && password.equals("123456")) {
+                    JOptionPane.showMessageDialog(this, "¡Iniciaste Secion Correctamente! Bienvenido al sistema.", "Acceso Permitido", JOptionPane.INFORMATION_MESSAGE);
+                    new DashboardView().setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Credenciales incorrectas.", "Error", JOptionPane.ERROR_MESSAGE);
+
+                    txtUsuario.setText("");
+                    txtPassword.setText("");
+
+                    txtUsuario.requestFocus();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Error crítico: No se pudo conectar a la base de datos PostgreSQL.", "Fallo de Servidor", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        
+        txtUsuario.addActionListener(e -> {
+            txtPassword.requestFocus();
+        });
+
+        txtPassword.addActionListener(e -> {
+            btnIngresar.doClick();
         });
 
         add(panelPrincipal);
