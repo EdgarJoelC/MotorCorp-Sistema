@@ -137,26 +137,24 @@ public class DashboardView extends JFrame {
         }
 
         JPanel menuItems = new JPanel();
-        menuItems.setLayout(new GridLayout(7, 1, 0, 6));
+        menuItems.setLayout(new GridLayout(6, 1, 0, 5));
         menuItems.setBackground(Color.WHITE);
         menuItems.setBorder(BorderFactory.createEmptyBorder(5, 14, 10, 14));
-        menuItems.setMaximumSize(new Dimension(ANCHO_MAX, 360));
+        menuItems.setMaximumSize(new Dimension(ANCHO_MAX, 310));
 
         JButton btnInicio = crearBotonMenu("Inicio");
         JButton btnClientes = crearBotonMenu("Registrar Cliente");
         JButton btnCola = crearBotonMenu("Cola de Espera");
+        JButton btnMecanicos = crearBotonMenu("Gestión de Mecánicos");
         JButton btnInventario = crearBotonMenu("Inventario Avanzado");
-        JButton btnReportes = crearBotonMenu("Módulo de Reportes");
         JButton btnPOS = crearBotonMenu("Punto de Venta");
-        JButton btnHistorial = crearBotonMenu("Historial Taller");
 
         menuItems.add(btnInicio);
         menuItems.add(btnClientes);
         menuItems.add(btnCola);
+        menuItems.add(btnMecanicos);
         menuItems.add(btnInventario);
-        menuItems.add(btnReportes);
         menuItems.add(btnPOS);
-        menuItems.add(btnHistorial);
 
         JButton btnCerrar = new JButton("Cerrar Sesión");
         btnCerrar.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -198,10 +196,9 @@ public class DashboardView extends JFrame {
         panelContenedor.add(new PanelDashboard(), "INICIO");
         panelContenedor.add(new PanelClientes(), "CLIENTES");
         panelContenedor.add(new PanelTaller(), "COLA");
+        panelContenedor.add(new PanelMecanicos(), "MECANICOS");
         panelContenedor.add(new PanelInventario(), "INVENTARIO");
-        panelContenedor.add(new PanelReportes(), "REPORTES");
         panelContenedor.add(new PanelPOS(), "POS");
-        panelContenedor.add(new PanelHistorial(), "HISTORIAL");
 
         btnInicio.addActionListener(e -> {
             cardLayout.show(panelContenedor, "INICIO");
@@ -215,21 +212,17 @@ public class DashboardView extends JFrame {
             cardLayout.show(panelContenedor, "COLA");
             marcarActivo(btnCola);
         });
+        btnMecanicos.addActionListener(e -> {
+            cardLayout.show(panelContenedor, "MECANICOS");
+            marcarActivo(btnMecanicos);
+        });
         btnInventario.addActionListener(e -> {
             cardLayout.show(panelContenedor, "INVENTARIO");
             marcarActivo(btnInventario);
         });
-        btnReportes.addActionListener(e -> {
-            cardLayout.show(panelContenedor, "REPORTES");
-            marcarActivo(btnReportes);
-        });
         btnPOS.addActionListener(e -> {
             cardLayout.show(panelContenedor, "POS");
             marcarActivo(btnPOS);
-        });
-        btnHistorial.addActionListener(e -> {
-            cardLayout.show(panelContenedor, "HISTORIAL");
-            marcarActivo(btnHistorial);
         });
 
         btnCerrar.addActionListener(e -> {

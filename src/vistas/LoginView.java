@@ -1,17 +1,35 @@
 package vistas;
 
-import java.awt.*;
+import dao.UsuarioDAO;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 public class LoginView extends JFrame {
 
     private JTextField txtUsuario;
     private JPasswordField txtPassword;
     private JButton btnIngresar;
+    private UsuarioDAO usuarioDAO;
 
     public LoginView() {
+        usuarioDAO = new UsuarioDAO();
         setTitle("MotorCorp - Acceso al Sistema");
         setSize(420, 560);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,7 +124,25 @@ public class LoginView extends JFrame {
             }
         });
 
-        btnIngresar.addActionListener(e -> {
+        btnIngresar.addActionListener(e -> validarLoginBD());
+
+        txtUsuario.addActionListener(e -> txtPassword.requestFocus());
+        txtPassword.addActionListener(e -> btnIngresar.doClick());
+
+        add(panelPrincipal);
+    }
+
+    private void validarLoginBD() {
+        String usuario = txtUsuario.getText().trim();
+        String password = new String(txtPassword.getPassword()).trim();
+
+        if (usuario.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese su usuario y contraseña.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (usuarioDAO.autenticar(usuario, password)) {
+            JOptionPane.showMessageDialog(this, "¡Iniciaste Sesión Correctamente! Bienvenido al sistema.", "Acceso Permitido", JOptionPane.INFORMATION_MESSAGE);
             String usuario = txtUsuario.getText();
             String password = new String(txtPassword.getPassword());
 
@@ -142,8 +178,11 @@ public class LoginView extends JFrame {
 
         txtPassword.addActionListener(e -> {
             btnIngresar.doClick();
-        });
-
-        add(panelPrincipal);
+        } else {
+            JOptionPane.showMessageDialog(this, "Credenciales incorrectas.", "Error", JOptionPane.ERROR_MESSAGE);
+            txtUsuario.setText("");
+            txtPassword.setText("");
+            txtUsuario.requestFocus();
+        }
     }
 }
